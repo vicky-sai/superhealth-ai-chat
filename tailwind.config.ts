@@ -52,6 +52,11 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				'medical-blue': 'hsl(var(--medical-blue))',
+				'medical-green': 'hsl(var(--medical-green))',
+				'chat-bg': 'hsl(var(--chat-bg))',
+				'user-message': 'hsl(var(--user-message))',
+				'bot-message': 'hsl(var(--bot-message))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -92,5 +97,5 @@ export default {
 			}
 		}
 	},
-	plugins: [require("tailwindcss-animate")],
+	plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
