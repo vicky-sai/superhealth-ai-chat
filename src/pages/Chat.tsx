@@ -47,8 +47,18 @@ export const Chat = () => {
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
+    // Create a placeholder message for streaming
+    const botMessageId = (Date.now() + 1).toString();
+    const initialBotMessage: Message = {
+      id: botMessageId,
+      message: "",
+      isUser: false,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, initialBotMessage]);
+
     try {
-      // Replace this with your actual API call to localhost backend
       const response = await fetch(`${API_BASE_URL}/chat`, {
         method: 'POST',
         headers: {
@@ -67,16 +77,72 @@ export const Chat = () => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        message: data.response || "I apologize, but I couldn't process your request at the moment. Please try again.",
-        isUser: false,
-        timestamp: new Date(),
-      };
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedMessage = "";
 
-      setMessages(prev => [...prev, botMessage]);
+      if (reader) {
+        // Handle streaming response
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split('\n');
+
+          for (const line of lines) {
+            if (line.trim() === '') continue;
+            
+            try {
+              // Handle different streaming formats
+              let content = '';
+              if (line.startsWith('data: ')) {
+                const jsonStr = line.slice(6);
+                if (jsonStr === '[DONE]') break;
+                const data = JSON.parse(jsonStr);
+                content = data.choices?.[0]?.delta?.content || data.response || data.content || '';
+              } else {
+                // Try parsing as direct JSON
+                const data = JSON.parse(line);
+                content = data.response || data.content || '';
+              }
+
+              if (content) {
+                accumulatedMessage += content;
+                setMessages(prev => 
+                  prev.map(msg => 
+                    msg.id === botMessageId 
+                      ? { ...msg, message: accumulatedMessage }
+                      : msg
+                  )
+                );
+              }
+            } catch (parseError) {
+              // If it's not JSON, treat as plain text
+              accumulatedMessage += chunk;
+              setMessages(prev => 
+                prev.map(msg => 
+                  msg.id === botMessageId 
+                    ? { ...msg, message: accumulatedMessage }
+                    : msg
+                )
+              );
+            }
+          }
+        }
+      } else {
+        // Fallback for non-streaming response
+        const data = await response.json();
+        const finalMessage = data.response || "I apologize, but I couldn't process your request at the moment. Please try again.";
+        
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === botMessageId 
+              ? { ...msg, message: finalMessage }
+              : msg
+          )
+        );
+      }
     } catch (error) {
       console.error('Error sending message:', error);
       
