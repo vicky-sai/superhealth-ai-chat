@@ -12,8 +12,8 @@ interface Message {
   timestamp: Date;
 }
 
-// Mock API configuration - replace with your localhost backend URL
-const API_BASE_URL = "http://localhost:8000"; // Update this to match your backend
+// Ollama API configuration
+const API_BASE_URL = "http://localhost:11434";
 
 export const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -59,17 +59,27 @@ export const Chat = () => {
     setMessages(prev => [...prev, initialBotMessage]);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/chat`, {
+      // Build conversation history in Ollama format
+      const conversationMessages = messages.map(msg => ({
+        role: msg.isUser ? 'user' : 'assistant',
+        content: msg.message
+      }));
+      
+      // Add current user message
+      conversationMessages.push({
+        role: 'user',
+        content: messageText
+      });
+
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: messageText,
-          conversation_history: messages.map(msg => ({
-            role: msg.isUser ? 'user' : 'assistant',
-            content: msg.message
-          }))
+          model: "llama3", // You can make this configurable later
+          messages: conversationMessages,
+          stream: true
         }),
       });
 
@@ -94,19 +104,12 @@ export const Chat = () => {
             if (line.trim() === '') continue;
             
             try {
-              // Handle different streaming formats
-              let content = '';
-              if (line.startsWith('data: ')) {
-                const jsonStr = line.slice(6);
-                if (jsonStr === '[DONE]') break;
-                const data = JSON.parse(jsonStr);
-                content = data.choices?.[0]?.delta?.content || data.response || data.content || '';
-              } else {
-                // Try parsing as direct JSON
-                const data = JSON.parse(line);
-                content = data.response || data.content || '';
-              }
-
+              // Parse Ollama streaming format
+              const data = JSON.parse(line);
+              
+              // Ollama sends content in the 'content' field of the message
+              const content = data.message?.content || '';
+              
               if (content) {
                 accumulatedMessage += content;
                 setMessages(prev => 
@@ -117,16 +120,14 @@ export const Chat = () => {
                   )
                 );
               }
+              
+              // Check if the stream is done
+              if (data.done === true) {
+                break;
+              }
             } catch (parseError) {
-              // If it's not JSON, treat as plain text
-              accumulatedMessage += chunk;
-              setMessages(prev => 
-                prev.map(msg => 
-                  msg.id === botMessageId 
-                    ? { ...msg, message: accumulatedMessage }
-                    : msg
-                )
-              );
+              console.log('Parse error:', parseError, 'Line:', line);
+              // Skip invalid JSON lines
             }
           }
         }
