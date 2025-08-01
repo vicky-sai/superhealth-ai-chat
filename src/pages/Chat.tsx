@@ -4,12 +4,20 @@ import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Message {
   id: string;
   message: string;
   isUser: boolean;
   timestamp: Date;
+}
+
+interface OllamaModel {
+  name: string;
+  size: string;
+  digest: string;
+  modified_at: string;
 }
 
 // Ollama API configuration
@@ -25,6 +33,8 @@ export const Chat = () => {
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [availableModels, setAvailableModels] = useState<OllamaModel[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>("llama3");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -35,6 +45,32 @@ export const Chat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
+
+  // Fetch available models on component mount
+  useEffect(() => {
+    const fetchModels = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/tags`);
+        if (response.ok) {
+          const data = await response.json();
+          setAvailableModels(data.models || []);
+          // Set the first available model as default if none selected
+          if (data.models && data.models.length > 0 && !selectedModel) {
+            setSelectedModel(data.models[0].name);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching models:', error);
+        toast({
+          title: "Model Loading Error",
+          description: "Could not fetch available models from Ollama.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchModels();
+  }, []);
 
   const handleSendMessage = async (messageText: string) => {
     const userMessage: Message = {
@@ -77,7 +113,7 @@ export const Chat = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: "llama3", // You can make this configurable later
+          model: selectedModel,
           messages: conversationMessages,
           stream: true
         }),
@@ -177,6 +213,25 @@ export const Chat = () => {
   return (
     <div className="flex flex-col h-screen bg-chat-bg">
       <ChatHeader onSettingsClick={handleSettingsClick} />
+      
+      {/* Model Selection */}
+      <div className="border-b border-chat-border bg-chat-bg px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center gap-3">
+          <span className="text-sm font-medium text-foreground">Model:</span>
+          <Select value={selectedModel} onValueChange={setSelectedModel}>
+            <SelectTrigger className="w-64">
+              <SelectValue placeholder="Select a model" />
+            </SelectTrigger>
+            <SelectContent>
+              {availableModels.map((model) => (
+                <SelectItem key={model.name} value={model.name}>
+                  {model.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-4">
