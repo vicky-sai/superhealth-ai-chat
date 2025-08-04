@@ -21,7 +21,7 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
         "max-w-[80%] rounded-lg px-4 py-2 shadow-sm",
         isUser 
           ? "bg-user-message text-white" 
-          : "bg-bot-message text-foreground border"
+          : "bg-bot-message text-gray-800 border border-gray-200"
       )}>
         <div className="prose prose-sm max-w-none dark:prose-invert">
           {isUser ? (
@@ -49,7 +49,7 @@ export const ChatMessage = ({ message, isUser, timestamp }: ChatMessageProps) =>
         
         <div className={cn(
           "text-xs mt-2 opacity-70",
-          isUser ? "text-white/70" : "text-muted-foreground"
+          isUser ? "text-white/70" : "text-gray-500"
         )}>
           {timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </div>

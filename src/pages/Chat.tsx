@@ -3,6 +3,7 @@ import { ChatHeader } from "@/components/ChatHeader";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
 import { TypingIndicator } from "@/components/TypingIndicator";
+import { ChatExportActions } from "@/components/ChatExportActions";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -214,22 +215,25 @@ export const Chat = () => {
     <div className="flex flex-col h-screen bg-chat-bg">
       <ChatHeader onSettingsClick={handleSettingsClick} />
       
-      {/* Model Selection */}
-      <div className="border-b border-chat-border bg-chat-bg px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center gap-3">
-          <span className="text-sm font-medium text-foreground">Model:</span>
-          <Select value={selectedModel} onValueChange={setSelectedModel}>
-            <SelectTrigger className="w-64">
-              <SelectValue placeholder="Select a model" />
-            </SelectTrigger>
-            <SelectContent>
-              {availableModels.map((model) => (
-                <SelectItem key={model.name} value={model.name}>
-                  {model.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      {/* Model Selection and Export Actions */}
+      <div className="border-b border-gray-200 bg-chat-bg px-4 py-3">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-gray-700">Model:</span>
+            <Select value={selectedModel} onValueChange={setSelectedModel}>
+              <SelectTrigger className="w-64 border-gray-300">
+                <SelectValue placeholder="Select a model" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableModels.map((model) => (
+                  <SelectItem key={model.name} value={model.name}>
+                    {model.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <ChatExportActions messages={messages} />
         </div>
       </div>
       

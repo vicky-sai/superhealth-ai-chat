@@ -14,7 +14,7 @@ export const TypingIndicator = () => {
             <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
             <div className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
           </div>
-          <span className="text-sm text-muted-foreground ml-2">Superhealth is thinking...</span>
+          <span className="text-sm text-gray-400 ml-2">Superhealth is thinking...</span>
         </div>
       </div>
     </div>
