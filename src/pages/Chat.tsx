@@ -264,7 +264,7 @@ export const Chat = () => {
         </div>
       </div>
       
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto relative">
         <div className="max-w-4xl mx-auto p-4">
           {messages.map((message) => (
             <ChatMessage
@@ -277,6 +277,15 @@ export const Chat = () => {
           
           {isLoading && <TypingIndicator />}
           <div ref={messagesEndRef} />
+        </div>
+        
+        {/* Doctor 3D Image positioned on the left */}
+        <div className="fixed bottom-20 left-4 z-10 hidden lg:block">
+          <img 
+            src="/lovable-uploads/383c5457-3cbb-4fb2-b5c9-535cda6b2198.png" 
+            alt="Healthcare AI Assistant Doctor" 
+            className="w-32 h-auto opacity-80 hover:opacity-100 transition-opacity duration-300"
+          />
         </div>
       </div>
 
