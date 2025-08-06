@@ -37,7 +37,7 @@ export const ChatInput = ({ onSendMessage, isLoading, disabled }: ChatInputProps
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Ask Superhealth about your health concerns..."
-            className="min-h-[44px] max-h-32 resize-none pr-12 rounded-lg border-2 border-gray-300 focus:border-primary transition-colors bg-background text-foreground"
+            className="min-h-[44px] max-h-32 resize-none pr-12 rounded-lg border-2 border-muted-foreground/30 focus:border-primary transition-colors bg-background text-foreground placeholder:text-muted-foreground"
             disabled={disabled || isLoading}
           />
         </div>

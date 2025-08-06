@@ -3,7 +3,7 @@ import { ChatHeader } from "@/components/ChatHeader";
 import { ChatMessage } from "@/components/ChatMessage";
 import { ChatInput } from "@/components/ChatInput";
 import { TypingIndicator } from "@/components/TypingIndicator";
-import { ChatExportActions } from "@/components/ChatExportActions";
+import { ChatControls } from "@/components/ChatControls";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -204,6 +204,29 @@ export const Chat = () => {
     }
   };
 
+  const handleNewChat = () => {
+    setMessages([
+      {
+        id: "1",
+        message: "Hello! I'm Superhealth, your AI healthcare assistant. I'm here to help answer your health-related questions and provide medical information. Please note that I'm not a replacement for professional medical advice. How can I assist you today?",
+        isUser: false,
+        timestamp: new Date(),
+      },
+    ]);
+    toast({
+      title: "New Chat Started",
+      description: "Started a fresh conversation.",
+    });
+  };
+
+  const handleClearChat = () => {
+    setMessages([]);
+    toast({
+      title: "Chat Cleared",
+      description: "All messages have been cleared.",
+    });
+  };
+
   const handleSettingsClick = () => {
     toast({
       title: "Settings",
@@ -215,13 +238,13 @@ export const Chat = () => {
     <div className="flex flex-col h-screen bg-chat-bg">
       <ChatHeader onSettingsClick={handleSettingsClick} />
       
-      {/* Model Selection and Export Actions */}
-      <div className="border-b border-gray-200 bg-chat-bg px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+      {/* Model Selection and Chat Controls */}
+      <div className="border-b border-muted bg-chat-bg px-4 py-3">
+        <div className="max-w-4xl mx-auto flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-gray-700">Model:</span>
+            <span className="text-sm font-medium text-muted-foreground">Model:</span>
             <Select value={selectedModel} onValueChange={setSelectedModel}>
-              <SelectTrigger className="w-64 border-gray-300">
+              <SelectTrigger className="w-64 border-muted-foreground/30">
                 <SelectValue placeholder="Select a model" />
               </SelectTrigger>
               <SelectContent>
@@ -233,7 +256,11 @@ export const Chat = () => {
               </SelectContent>
             </Select>
           </div>
-          <ChatExportActions messages={messages} />
+          <ChatControls 
+            messages={messages} 
+            onNewChat={handleNewChat}
+            onClearChat={handleClearChat}
+          />
         </div>
       </div>
       

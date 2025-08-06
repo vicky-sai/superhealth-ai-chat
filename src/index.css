@@ -11,36 +11,36 @@ All colors MUST be HSL.
     --background: 248 250 252;
     --foreground: 215 20% 15%;
 
-    --card: 255 255 255;
+    --card: 0 0% 100%;
     --card-foreground: 215 20% 15%;
 
-    --popover: 255 255 255;
+    --popover: 0 0% 100%;
     --popover-foreground: 215 20% 15%;
 
     --primary: 213 94% 68%;
-    --primary-foreground: 255 255 255;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 210 40% 96%;
     --secondary-foreground: 215 20% 15%;
 
-    --muted: 243 244 246;
-    --muted-foreground: 107 114 126;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 13% 45%;
 
     --accent: 169 84% 78%;
     --accent-foreground: 215 20% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 255 255 255;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 229 231 235;
-    --input: 229 231 235;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 213 94% 68%;
 
     --medical-blue: 213 94% 68%;
     --medical-green: 169 84% 78%;
     --chat-bg: 248 250 252;
     --user-message: 213 94% 68%;
-    --bot-message: 255 255 255;
+    --bot-message: 0 0% 100%;
     
     --gradient-primary: linear-gradient(135deg, hsl(213 94% 68%), hsl(169 84% 78%));
     --gradient-subtle: linear-gradient(180deg, hsl(248 250 252), hsl(255 255 255));
