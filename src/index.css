@@ -8,37 +8,37 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 248 250 252;
-    --foreground: 215 20% 15%;
+    --background: 0 0% 98%;
+    --foreground: 222 20% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 20% 15%;
+    --card-foreground: 222 20% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 20% 15%;
+    --popover-foreground: 222 20% 20%;
 
     --primary: 213 94% 68%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 215 20% 15%;
+    --secondary: 210 40% 95%;
+    --secondary-foreground: 222 20% 20%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 13% 45%;
+    --muted: 210 40% 95%;
+    --muted-foreground: 215 13% 50%;
 
     --accent: 169 84% 78%;
-    --accent-foreground: 215 20% 15%;
+    --accent-foreground: 222 20% 20%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    --border: 214 32% 85%;
+    --input: 214 32% 85%;
     --ring: 213 94% 68%;
 
     --medical-blue: 213 94% 68%;
     --medical-green: 169 84% 78%;
-    --chat-bg: 248 250 252;
+    --chat-bg: 0 0% 98%;
     --user-message: 213 94% 68%;
     --bot-message: 0 0% 100%;
     
