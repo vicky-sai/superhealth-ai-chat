@@ -282,7 +282,7 @@ export const Chat = () => {
         {/* Doctor 3D Image positioned on the left */}
         <div className="fixed bottom-20 left-4 z-10 hidden lg:block">
           <img 
-            src="/lovable-uploads/383c5457-3cbb-4fb2-b5c9-535cda6b2198.png" 
+            src="/lovable-uploads/98c5903f-a66c-4d50-ad0e-886eee3d144d.png" 
             alt="Healthcare AI Assistant Doctor" 
             className="w-32 h-auto opacity-80 hover:opacity-100 transition-opacity duration-300"
           />
