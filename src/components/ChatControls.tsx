@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2, Save, Download, FileText } from "lucide-react";
+import { PlusCircle, Trash2, Save, Download, FileText, ChevronDown } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 
 interface Message {
@@ -51,6 +52,10 @@ export const ChatControls = ({ messages, onNewChat, onClearChat }: ChatControlsP
     });
   };
 
+  const exportAsPDF = () => {
+    // For now, export as text (PDF generation would require additional libraries)
+    exportAsText();
+  };
   const exportAsHTML = () => {
     const htmlContent = `
       <!DOCTYPE html>
@@ -126,24 +131,34 @@ export const ChatControls = ({ messages, onNewChat, onClearChat }: ChatControlsP
         <Save className="w-4 h-4 mr-2" />
         Save Chat
       </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={exportAsText}
-        className="text-foreground border-muted-foreground/30 hover:bg-muted"
-      >
-        <Download className="w-4 h-4 mr-2" />
-        Export Text
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={exportAsHTML}
-        className="text-foreground border-muted-foreground/30 hover:bg-muted"
-      >
-        <FileText className="w-4 h-4 mr-2" />
-        Export HTML
-      </Button>
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-foreground border-muted-foreground/30 hover:bg-muted"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Chat
+            <ChevronDown className="w-3 h-3 ml-1" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={exportAsText}>
+            <FileText className="w-4 h-4 mr-2" />
+            Export as Text
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={exportAsPDF}>
+            <Download className="w-4 h-4 mr-2" />
+            Export as PDF
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={exportAsHTML}>
+            <FileText className="w-4 h-4 mr-2" />
+            Export as HTML
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
