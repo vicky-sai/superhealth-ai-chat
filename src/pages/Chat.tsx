@@ -35,7 +35,7 @@ export const Chat = () => {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const [availableModels, setAvailableModels] = useState<OllamaModel[]>([]);
-  const [selectedModel, setSelectedModel] = useState<string>("llama3");
+  const [selectedModel, setSelectedModel] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -55,8 +55,8 @@ export const Chat = () => {
         if (response.ok) {
           const data = await response.json();
           setAvailableModels(data.models || []);
-          // Set the first available model as default if none selected
-          if (data.models && data.models.length > 0 && !selectedModel) {
+          // Set the first available model as default
+          if (data.models && data.models.length > 0) {
             setSelectedModel(data.models[0].name);
           }
         }
