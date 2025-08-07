@@ -117,7 +117,7 @@ export const ChatControls = ({ messages, onNewChat, onClearChat }: ChatControlsP
         variant="outline"
         size="sm"
         onClick={onClearChat}
-        className="text-foreground border-muted-foreground/30 hover:bg-muted"
+        className="text-red-500 border-muted-foreground/30 hover:bg-muted"
       >
         <Trash2 className="w-4 h-4 mr-2" />
         Clear Chat
